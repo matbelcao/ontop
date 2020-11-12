@@ -142,7 +142,7 @@ public class DefaultDBMetadataProvider implements DBMetadataProvider {
     }
 
 
-    protected final QuotedID retrieveDefaultSchema(String sql) throws MetadataExtractionException {
+    protected QuotedID retrieveDefaultSchema(String sql) throws MetadataExtractionException {
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             rs.next();

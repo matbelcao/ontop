@@ -13,6 +13,10 @@ public class LocalJDBCConnectionUtils {
      */
     public static Connection createConnection(OntopSQLCredentialSettings settings) throws SQLException {
 
+        //TODO: check the driver registration standards
+        DriverManager.registerDriver(new com.github.mmolimar.ksql.jdbc.KsqlDriver());
+        System.out.println("TEST-DRIVER: " + DriverManager.getDrivers().nextElement().toString());
+
         try {
             // This should work in most cases (e.g. from CLI, Protege, or Jetty)
             return DriverManager.getConnection(settings.getJdbcUrl(), settings.getJdbcUser(), settings.getJdbcPassword());
