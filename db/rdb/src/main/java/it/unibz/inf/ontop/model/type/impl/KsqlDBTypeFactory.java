@@ -11,7 +11,7 @@ import java.util.Map;
 import static it.unibz.inf.ontop.model.type.DBTermType.Category.FLOAT_DOUBLE;
 import static it.unibz.inf.ontop.model.type.DBTermType.Category.INTEGER;
 
-public class KSQLDBTypeFactory extends DefaultSQLDBTypeFactory {
+public class KsqlDBTypeFactory extends DefaultSQLDBTypeFactory {
 
     /**
      * KSQL-DB datatypes description : https://docs.ksqldb.io/en/latest/developer-guide/syntax-reference/#data-types
@@ -30,7 +30,7 @@ public class KSQLDBTypeFactory extends DefaultSQLDBTypeFactory {
     protected static final String MAP_STR = "MAP"; //TODO
 
     @AssistedInject
-    protected KSQLDBTypeFactory(@Assisted TermType rootTermType, @Assisted TypeFactory typeFactory) {
+    protected KsqlDBTypeFactory(@Assisted TermType rootTermType, @Assisted TypeFactory typeFactory) {
         super(createKSQLTypeMap(rootTermType, typeFactory), createKSQLCodeMap());
     }
 

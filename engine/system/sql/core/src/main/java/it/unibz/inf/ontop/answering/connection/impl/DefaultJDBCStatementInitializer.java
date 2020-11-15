@@ -28,8 +28,8 @@ public class DefaultJDBCStatementInitializer implements JDBCStatementInitializer
 
     protected Statement init(Statement statement) throws SQLException {
         int fetchSize = settings.getFetchSize();
-        if (fetchSize > 0)
-            statement.setFetchSize(fetchSize);
+        /*if (fetchSize > 0)
+            statement.setFetchSize(fetchSize);*/
         return statement;
     }
 }
