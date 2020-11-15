@@ -1,9 +1,9 @@
 package it.unibz.inf.ontop.dbschema.impl;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
-import it.unibz.inf.ontop.dbschema.QuotedID;
-import it.unibz.inf.ontop.dbschema.QuotedIDFactory;
+import it.unibz.inf.ontop.dbschema.*;
 import it.unibz.inf.ontop.exception.MetadataExtractionException;
 import it.unibz.inf.ontop.model.type.TypeFactory;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class KsqlDBMetadataProvider extends  DefaultDBMetadataProvider{
         super(connection, getQuotedIDFactory(connection), typeFactory);
         try {
             this.metadata = connection.getMetaData();
-            defaultSchema = retrieveDefaultSchema("SHOW TABLES");
+            defaultSchema = rawIdFactory.createRelationID(connection.getSchema(), "DUMMY").getSchemaID();
         }
         catch (SQLException e) {
             throw new MetadataExtractionException(e);
@@ -33,26 +33,44 @@ public class KsqlDBMetadataProvider extends  DefaultDBMetadataProvider{
     protected static QuotedIDFactory getQuotedIDFactory(Connection connection) throws MetadataExtractionException {
         try {
             DatabaseMetaData md = connection.getMetaData();
-            return new KsqlQuotedIDFactory(false);
+            return new KsqlQuotedIDFactory(true);
         }catch (SQLException e) {
             throw new MetadataExtractionException(e);
         }
     }
 
     @Override
-    protected QuotedID retrieveDefaultSchema(String sql) throws MetadataExtractionException {
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            rs.next();
-            /*System.out.println();
-            System.out.println("SCHEMA: "+connection.getSchema());*/
-            return rawIdFactory.createRelationID(connection.getSchema(), "DUMMY").getSchemaID();
-        }
-        catch (SQLException e) {
-            throw new MetadataExtractionException(e);
-        }
+    public QuotedID getDefaultSchema() { return defaultSchema; }
+
+    @Override
+    public void insertIntegrityConstraints(DatabaseRelationDefinition relation, MetadataLookup metadataLookup) throws MetadataExtractionException {
+        // TODO: CHECK KSQLDB DOCUMENTATION for primary keys and unique identifiers!!!!
+    }
+
+
+
+
+    @Override
+    protected String getRelationSchema(RelationID relationID) { return null; }
+
+    @Override
+    protected RelationID getRelationID(ResultSet rs) throws SQLException {
+        return getRelationID_KSQLDB(rs,"TABLE_NAME");
     }
 
     @Override
-    public QuotedID getDefaultSchema() { return defaultSchema; }
+    protected RelationID getPKRelationID(ResultSet rs) throws SQLException {
+        return getRelationID_KSQLDB(rs,"PKTABLE_NAME");
+    }
+
+    @Override
+    protected RelationID getFKRelationID(ResultSet rs) throws SQLException {
+        return getRelationID_KSQLDB(rs,"FKTABLE_NAME");
+    }
+
+    // KSQL-DB doesn't have a schema!!
+    protected final RelationID getRelationID_KSQLDB(ResultSet rs, String tableNameColumn) throws SQLException {
+        return rawIdFactory.createRelationID(null, rs.getString(tableNameColumn));
+    }
+
 }

@@ -29,11 +29,6 @@ public class KsqlQuotedIDFactory implements QuotedIDFactory {
         return new RelationIDImpl(createFromString(schema), createFromString(table));
     }
 
-    /**
-     *
-     * @param s schema/table/attribute string name possibly quoted (SQL rendering)
-     * @return
-     */
     private QuotedID createFromString(String s) {
         if (s == null)
             return new QuotedIDImpl(s, SQLStandardQuotedIDFactory.NO_QUOTATION);
@@ -42,7 +37,7 @@ public class KsqlQuotedIDFactory implements QuotedIDFactory {
         if (s.startsWith(SQL_QUOTATION_STRING) && s.endsWith(SQL_QUOTATION_STRING))
             return new QuotedIDImpl(s.substring(1, s.length() - 1), SQL_QUOTATION_STRING, caseSensitiveTableNames);
 
-        return new QuotedIDImpl(s, SQLStandardQuotedIDFactory.NO_QUOTATION, caseSensitiveTableNames);
+        return new QuotedIDImpl(s, SQL_QUOTATION_STRING, caseSensitiveTableNames);
     }
 
     @Override
