@@ -31,10 +31,10 @@ public class KsqlDBTypeFactory extends DefaultSQLDBTypeFactory {
 
     @AssistedInject
     protected KsqlDBTypeFactory(@Assisted TermType rootTermType, @Assisted TypeFactory typeFactory) {
-        super(createKSQLTypeMap(rootTermType, typeFactory), createKSQLCodeMap());
+        super(createKsqlTypeMap(rootTermType, typeFactory), createKsqlCodeMap());
     }
 
-    private static Map<String, DBTermType> createKSQLTypeMap(TermType rootTermType, TypeFactory typeFactory) {
+    private static Map<String, DBTermType> createKsqlTypeMap(TermType rootTermType, TypeFactory typeFactory) {
 
         TermTypeAncestry rootAncestry = rootTermType.getAncestry();
 
@@ -54,7 +54,7 @@ public class KsqlDBTypeFactory extends DefaultSQLDBTypeFactory {
         return map;
     }
 
-    private static ImmutableMap<DefaultTypeCode, String> createKSQLCodeMap() {
+    private static ImmutableMap<DefaultTypeCode, String> createKsqlCodeMap() {
         Map<DefaultTypeCode, String> map = createDefaultSQLCodeMap();
         map.put(DefaultTypeCode.STRING, STRING_STR);
         return ImmutableMap.copyOf(map);

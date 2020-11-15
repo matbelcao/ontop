@@ -20,7 +20,7 @@ import java.util.Optional;
  * See SQLAlgebraFactory for creating a new instance.
  */
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-public class SelectFromWhereWithModifiersImpl implements SelectFromWhereWithModifiers {
+public class KsqlDBSelectFromWhereWithModifiersImpl implements SelectFromWhereWithModifiers {
 
     private final ImmutableSortedSet<Variable> projectedVariables;
     private final ImmutableSubstitution<? extends ImmutableTerm> substitution;
@@ -33,21 +33,21 @@ public class SelectFromWhereWithModifiersImpl implements SelectFromWhereWithModi
     private final ImmutableList<SQLOrderComparator> sortConditions;
 
     @AssistedInject
-    private SelectFromWhereWithModifiersImpl(@Assisted ImmutableSortedSet<Variable> projectedVariables,
-                                             @Assisted ImmutableSubstitution<? extends ImmutableTerm> substitution,
-                                             @Assisted("fromExpression") SQLExpression fromExpression,
-                                             @Assisted("whereExpression") Optional<ImmutableExpression> whereExpression,
-                                             @Assisted("groupBy") ImmutableSet<Variable> groupByVariables,
-                                             @Assisted boolean isDistinct,
-                                             @Assisted("limit") Optional<Long> limit,
-                                             @Assisted("offset") Optional<Long> offset,
-                                             @Assisted("sortConditions") ImmutableList<SQLOrderComparator> sortConditions) {
+    private KsqlDBSelectFromWhereWithModifiersImpl(@Assisted ImmutableSortedSet<Variable> projectedVariables,
+                                                   @Assisted ImmutableSubstitution<? extends ImmutableTerm> substitution,
+                                                   @Assisted("fromExpression") SQLExpression fromExpression,
+                                                   @Assisted("whereExpression") Optional<ImmutableExpression> whereExpression,
+                                                   @Assisted("groupBy") ImmutableSet<Variable> groupByVariables,
+                                                   @Assisted boolean isDistinct,
+                                                   @Assisted("limit") Optional<Long> limit,
+                                                   @Assisted("offset") Optional<Long> offset,
+                                                   @Assisted("sortConditions") ImmutableList<SQLOrderComparator> sortConditions) {
         this.projectedVariables = projectedVariables;
         this.substitution = substitution;
         this.fromExpression = fromExpression;
         this.whereExpression = whereExpression;
         this.groupByVariables = groupByVariables;
-        this.isDistinct = isDistinct;
+        this.isDistinct = false;  // NOT SUPPORTED BY KSQL
         this.limit = limit;
         this.offset = offset;
         this.sortConditions = sortConditions;
